@@ -51,6 +51,16 @@ async def add_product(supplier_id: int, products_details: product_pydanticIn):
     return {'status': 'ok', 'data': response}
 
 
+@app.get('/product')
+async def get_all_products():
+    response = await product_pydantic.from_queryset(Product.all())
+    return {'status': 'ok', 'data': response}
+
+@app.get('/product/{id}')
+async def get_specific_product(id: int):
+    response = await product_pydantic.from_queryset_single(Product.get(id = id))
+    return {'status': 'ok', 'data': response}
+
 register_tortoise(
     app,
     db_url='sqlite://db.sqlite3',
