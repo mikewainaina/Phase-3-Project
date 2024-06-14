@@ -27,12 +27,13 @@ async def get_specific_supplier(supplier_id:int):
 async def update_supplier(supplier_id: int, update_info: supplier_pydanticIn):
     supplier = await Supplier.get(id=supplier_id)
     update_info= update_info.dict(exclude_unset=True)
-    supplier.name =update_info.name
-    supplier.company = update_info.company
-    supplier.phone_number = update_info.phone_number
-    supplier.email = update_info.email
+    supplier.name =update_info['name']
+    supplier.company = update_info['company']
+    supplier.phone_number = update_info['phone_number']
+    supplier.email = update_info['email']
     await supplier.save()
-    response = supplier_pydantic.from_tortoise_orm(supplier)
+    response = await supplier_pydantic.from_tortoise_orm(supplier)
+    return {'status': 'ok', 'data': response}
 
 register_tortoise(
     app,
